@@ -77,6 +77,7 @@ my $file = shift
 > use strict;:强制使用严格、良好的编程风格<br>
 > use v5.12:自动加载strict编译指令<br>
 > 大部分人的建议：比屏幕长的程序都应该加上use strict
+* our 全局变量
 # 5 hash哈希
 # 6 输入与输出
 ## printf格式化输出
@@ -127,7 +128,13 @@ STDIN、STDOUT、STDERR、DATA、ARGV、ARGVOUT
     * path函数：它返回一个 Path::Tiny 对象。
     * slurp:把文件里所有的内容一次性读出来，然后保存到一个变量里。
         $content = $file->slurp(-> 是Perl中用来调用对象方法的符号。这里我们用它来告诉$file对象，我们要使用它的slurp方法。)
+* Graph::Undirected
+    * ->new 用于初始化和创建一个新的对象实例。
+    * ->add_edge 用于在图中添加一条边。此方法期望接收两个参数，这两个参数代表边的两个节点。
+    * ->connected_components 用于找出图中所有的连接组件。无向图中的连接组件是指图中最大的顶点集合，集合中的任意两个顶点都是通过路径相连的。返回一个数组的引用，这个数组包含了多个数组的引用。
+用于处理无向图
 # 内置文档格式
 Pod：它允许开发者在源代码中嵌入文档。Pod文档可以被转换成多种格式，如HTML、man页等。
 * =head1 NAME 这是一个Pod指令，表示文档的“名称”部分的开始。
 * =head1 SYNOPSIS 这是一个Pod指令，表示文档的“概要”或“使用说明”部分的开始。
+
