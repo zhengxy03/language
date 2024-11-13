@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+print "what's the radius?\n";
+chomp($r = <STDIN>);
+$pi = 3.141592654;
+$circ =  2 * $pi * $r;
+if ( $r < 0 ){
+    print "The circumference of the circle of radius $r is 0 ";
+}else{
+    print "The circumference of the circle of radius $r is $circ.\n";
+}
