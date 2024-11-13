@@ -1,0 +1,21 @@
+#!/usr/bin/perl -w
+sub above_average {
+    my $sum = 0;
+    foreach (@_){
+        $sum += $_;
+    }
+    $num = scalar @_;
+    $average = $sum / $num;
+
+    my @array;
+    foreach (@_){
+        if ( $_ > $average ){
+            push @array, $_;
+        }
+    }
+    return \@array;
+}
+
+
+$fred = above_average(1..10);
+print "fred is " . join(", ", @{$fred}) . "\n"; 

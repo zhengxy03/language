@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w 
+sub greet {
+    my @array;
+    foreach (@array){
+        if ( $_ = 1){
+            return $_;
+        }else
+    }
+}
+print "Hi,"

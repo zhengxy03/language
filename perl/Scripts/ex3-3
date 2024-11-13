@@ -4,5 +4,5 @@ chomp(@lines = <STDIN>);
 @sorted = sort @lines;
 #在同一行显示
 print "@sorted\n";
-#换行显示
+#换行显示去除chomp
 #print sort <STDIN>;

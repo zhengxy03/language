@@ -1,0 +1,13 @@
+#!/usr/bin/perl -w
+sub total {
+    my $sum = 0;
+    
+    foreach my $number (@_){
+        $sum += $number;
+    }
+    $sum;
+}
+
+@result = (1..1000);
+$result = total(@result);
+print "the result is $result.\n";
