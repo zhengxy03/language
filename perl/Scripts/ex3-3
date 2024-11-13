@@ -1,0 +1,8 @@
+#!/usr/bin/perl -w
+print "enter some strings, end with Ctrl-D\n";
+chomp(@lines = <STDIN>);
+@sorted = sort @lines;
+#在同一行显示
+print "@sorted\n";
+#换行显示
+#print sort <STDIN>;
