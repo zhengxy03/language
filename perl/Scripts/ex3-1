@@ -1,4 +1,4 @@
 #!/usr/bin/perl -w
 print "enter several lines, then end with: Control+D\n"
-@lines = <STDIN>
-print reverse @lines
+@lines = <STDIN>;
+print reverse @lines;
