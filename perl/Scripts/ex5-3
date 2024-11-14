@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+print "please set the width\n";
+chomp(my $width = <STDIN>);
+print "enter some lines, and end with ctrl-D\n";
+
+chomp(my @lines = <STDIN>);
+print "1234567890" x (($width+10)/10), "\n";
+foreach (@lines){
+    printf "%${width}s\n", $_;
+}

@@ -110,6 +110,7 @@ while(){
     ...;
 }
 ```
+内部是布尔上下文（特殊的标量上下文）
 ## 2.6 获取用户输入：<STDIN>
 由<STDIN>返回的字符串一般都在末尾有换行符，可以用chomp()去除末尾换行符
 * chomp()
@@ -122,7 +123,7 @@ while(){
 因此，简单地说，列表是数据，而数组是变量。<br>
 以$开头的总是标量，<br>
 以@开头的总是数组，<br>
-以%开头的总是散列。<br>
+以%开头的总是哈希。<br>
 ## 3.1 访问数组元素
 ```
 @array
@@ -243,7 +244,7 @@ print "@array";
    * %%：打印一个真正的百分号，它的特殊之处在于它不需要列表中的元素与之对应。
 * 数组和printf
 ```
-printf "the items are:\n" . ("%10s\n x @items), @items
+printf "the items are:\n" . ("%10s\n x @items), @items;
 ```
 ## 5.5文件句柄
 标准文件句柄：STDIN、STDOUT、STDERR、DATA、ARGV、ARGVOUT
@@ -292,7 +293,40 @@ use autodie;
 ```
 ## 5.7 say输出
 打印每行内容时自动添加换行符
-# 5 hash哈希
+# 6 hash哈希
+键是唯一的字符串
+## 6.1 访问哈希元素
+```
+$hash{$some_key}
+```
+* 访问整个哈希 `%hash`
+* 展开哈希
+```
+@any_array = %some_hash
+#顺序会改变，但键值还是黏着的
+```
+## 6.2 哈希赋值
+```
+my %new_hash = %old_hash
+```
+* 键值互换（唯一情况下）
+```
+my %inverse_hash = reverse %any_hash
+```
+* 胖箭头
+可以省略左边的引号（--裸字——无需引号的字符串）<br>
+花括号内也可以省略引号但不是裸字
+## 6.3 哈希函数
+* keys和values
+分别返回哈希的键和值列表，没有成员则返回空列表，但不能预测顺序；在标量上下文中返回哈希中元素的个数
+* each函数
+遍历哈希，包含两个元素的列表的形式返回键-值对，while循环中：
+```
+while (($key, $value) = each %hash){
+    print "$key => $value\n";
+}
+#依旧乱序
+```
 # 7 regular expression正则表达式
 ## 7.1 通配符
 * 点号`.`能匹配除换行外的任意单个字符
