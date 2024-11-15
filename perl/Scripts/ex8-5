@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+while (<STDIN>){
+    chomp;
+    if (/\b\w*a\b)(.{0,5}/s){
+        print "'word' contains '$1 and $2'\n";
+    }
+    else{
+        print "No match\n";
+    }
+}
