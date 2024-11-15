@@ -1,0 +1,11 @@
+#!/usr/bin/perl -w
+use 5.010;
+print "enter some words\n";
+chomp(my @words = <STDIN>);
+my (%count, $word);
+foreach $word (@words){
+    $count{$word} += 1;
+}
+foreach $word (keys %count){
+    print "the number of $word is $count{$word}\n";
+}

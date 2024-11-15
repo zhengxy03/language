@@ -327,6 +327,15 @@ while (($key, $value) = each %hash){
 }
 #依旧乱序
 ```
+* exist
+是否存在某个键
+* delete
+删除指定键值
+## 6.4 %ENV哈希
+访问环境
+```
+print "PATH is $ENV{PATH}\n";
+```
 # 7 regular expression正则表达式
 ## 7.1 通配符
 * 点号`.`能匹配除换行外的任意单个字符

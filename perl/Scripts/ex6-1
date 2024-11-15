@@ -1,0 +1,9 @@
+#!/usr/bin/perl -w
+print "enter the name\n";
+chomp(my $name = <STDIN>);
+my %last_name = (
+    fred => 'flintstone',
+    barney => 'rubble',
+    wlima => 'flintstone',
+);
+print "${name}'s last name is $last_name{$name}\n";
