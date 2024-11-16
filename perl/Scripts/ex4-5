@@ -5,13 +5,10 @@ greet("Fred");
 greet("Barney");
 greet("Wilma");
 greet("Betty");
-
 state @last_people;
 sub greet {
-    
     my $name = shift;
     print "Hi, $name! ";
-    
     if (@last_people){
         print "@last_people is also here!\n";
     }else{

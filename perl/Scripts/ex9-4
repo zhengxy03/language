@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+
+$^I = ".bat";
+
+while (<>){
+
+    if (/^##/){
+
+        $_ = "#!/usr/bin/perl -w";
+
+    }
+
+    print "$_\n";
+
+}

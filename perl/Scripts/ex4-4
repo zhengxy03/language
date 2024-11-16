@@ -1,11 +1,10 @@
-#!/usr/bin/perl -w 
+#!/usr/bin/perl -w
 greet("Fred");
 greet("Barney");
 state $last_person;
 sub greet {
     my $name = shift;
-    print "Hi, $name! ";
-    
+    print "Hi, $name! ";  
     if (defined $last_person){
         print "$last_person is also here!\n";
     }else{

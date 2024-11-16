@@ -6,7 +6,6 @@ sub above_average {
     }
     $num = scalar @_;
     $average = $sum / $num;
-
     my @array;
     foreach (@_){
         if ( $_ > $average ){
@@ -17,5 +16,10 @@ sub above_average {
 }
 
 
+
+
+
 $fred = above_average(1..10);
+
 print "fred is " . join(", ", @{$fred}) . "\n"; 
+

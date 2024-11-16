@@ -1,0 +1,9 @@
+#!/usr/bin/perl -w
+my $what = 'fred|barney';
+while (<>){
+    if (/($what){3}/){
+       print "Matched\n";
+    }else{
+       print "No match\n";
+    }
+}
