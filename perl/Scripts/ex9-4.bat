@@ -1,5 +1,4 @@
 #!/usr/bin/perl -w
-##Copyright (C) 2024 by zxy
 $^I = ".bat";
 while (<>){
     if (/^#!/){

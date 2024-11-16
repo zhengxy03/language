@@ -1,0 +1,18 @@
+#!/usr/bin/perl -w
+my %do_these;
+foreach (@ARGV){
+    $do_these{$_} = 1;
+}
+while (<>){
+    if (/^## Copyright/){
+        delete $do_these{$ARGV};
+    }
+}
+@AGRV = sort keys %do_these;
+$^I = ".bat";
+while (<>){
+    if (/^#!/){
+        $_ = "#!/usr/bin/perl -w\n##Copyright (C) 2024 by zxy\n";
+    }
+    print "$_";
+}
