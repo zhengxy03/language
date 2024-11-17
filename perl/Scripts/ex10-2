@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+use 5.010;
+my $Debug = $ENV{DEBUG} // 1;
+my $secret = int(1+rand100);
+print "the secret number is $secret.\n" if $Debug;
+print "guess the number from 1 to 100:\n"
+while (<STDIN>){
+  chomp;
+  if ( $_ =~ /quit|exit|/^\s*\z/i){
+    last;
+  elsif ( $_ = int(1+rand100) ){
+    print " that was it \n";
+  elsif ( $_ > int(1+rand100){
+    print "too high\n";
+  }
+  else{
+    print "too low\n";
