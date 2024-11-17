@@ -1,0 +1,13 @@
+#!/usr/bin/perl -w
+print "guess the number from 1 to 100:\n"
+while (<STDIN>){
+  chomp;
+  if ( $_ =~ /quit|exit|/^\s*\z/i){
+    last;
+  elsif ( $_ = int(1+rand100) ){
+    print " that was it \n";
+  elsif ( $_ > int(1+rand100){
+    print "too high\n";
+  }
+  else{
+    print "too low\n";
