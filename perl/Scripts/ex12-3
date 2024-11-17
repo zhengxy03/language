@@ -1,0 +1,5 @@
+#!/usr/bin/perl -w
+die "no file supplied.\n" unless @ARGV;
+foreach (@ARGV){
+  print "$_ is readable and writable\n" if -r -w -o $_;
+}
