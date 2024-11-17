@@ -627,6 +627,7 @@ my $dirname = File::Basename::basename $name;
   * File::Spec
 是面向对象的模块（OO），可以调用方法：模块的名称->方法的名称
   * Path::Class
+提供了一个面向对象的方式来处理文件路径。
 * CGI.pm
 简单且高效的方式来创建动态网页内容。
 * DBI
@@ -634,12 +635,165 @@ my $dirname = File::Basename::basename $name;
   要连接数据库，use加载DBI模块并调用方法connect
 * 处理日期和时间：
   * DateTime
-  将描述转换成DateTime对象
+```
+my $dt = DateTime->from_epoch( epoch => time ); #将描述转换成DateTime对象
+printf '%4d%02d%02d', $dt->year, $dt->month, $dt->day;
+#看中间隔了多久
+my $dt1 = DateTime->new(       
+	year => 1987;
+	month => 12,
+	day =>18,
+);
+my $dt2 = DateTime->new(       
+	year => 2011;
+	month => 5,
+	day => 1,
+);
+my $duration = $dt2- $dt1;
+
+my @units = $duration->in_units( qw(year month day) );
+printf '%d years, %d months, and %d days', @units;
+```
+# 12 文件测试
+## 12.1 文件测试操作符
+-x的形式
+* -e 文件是否存在
+* -M最后一次修改到当前程序启动时刻之间的天数
+* -s文件字节大小
+* -A最后一次访问至今的天数
+* 栈式文件测试操作符
+## 12.2 stat和lstat
+## 12.3 localtime
+返回一个数字元素组成的列表
+
+## 12.4 位运算操作符
+权限位
+# 13 目录操作
+可以使用标准模块之一File::Spec实现相对路径和绝对路径之间的相互转换\
+## 13.1 修改工作目录
+chdir:和shell中的cd一个意思,但无法使用~开头
+```
+chdir '/etc' or die "cannot chdir to /etc :$!";
+```
+可以使用`File::HomeDir`模块去往特定用户的主目录，他支持大部分操作系统。
+## 13.2 文件名通配
+* 文件名通配：glob
+```
+my @all_file = glob '*';
+my @pm_file = glob '*.pm';
+```
+Perl内置的glob并非唯一选择，我们可以用`File::Glob`模块提供各式兼容和扩展的文件名通配。
+* 文件名通配的隐式语法
+尖括号<>调用
+```
+my @all_files = <*>; # 效果和这样的写法完全一致: my  @all_files = glob "*";
+```
+Perl 会把尖括号内出现的变量替换成它的值,类似于双引号内字符串的变量内插，如下
+```
+my $dir = '/etc';
+my @dir_file = <$dir/* $dir/.*>;
+```
+与文件句柄区分
+## 13.3 目录句柄
+打开opendir，读取readdir，关闭closedir，读到的是目录里的文件名
+```
+my $dir_to_process = '/etc';
+opendir my $dh, $dir_to_process or die "Cannot open $dir_to_process:$!";
+foreach $file (readdir $dh) {
+	print "one file in $dir_to_process is $file\n";
+}
+closedir $dh;
+```
+使用`裸字DIR`
+```
+my $dir_to_process = '/etc';
+opendir DIR, $dir_to_process or die "Cannot open $dir_to_process:$!";
+foreach $file (readdir DIR) {
+	print "one file in $dir_to_process is $file\n";
+}
+closedir DIR;
+```
+## 13.4 递归访问目录
+## 13.5 文件和目录的操作
+### 13.5.1 删除文件
+* unlink:
+```
+unlink 'slate', 'bedrock','lava';
+unlink qw{slate bedrock lava};
+
+unlink glob '*.o';
+```
+unlink返回的是成功删除的文件数目，我们可以把他们放到循环依次删除并检查
+```
+foreach my $file (qw(slate bedrock lava)) {
+	unlink $file or warn "failed on $file:$!\n";
+} 
+```
+* 重命名文件
+```
+rename 'old','new';
+```
+借用胖剪头=>:
+如何批量把名称是.old结尾的文件改名为以.new结尾?
+```
+foreach my $file (glob "*.old") {
+	my $newfile = $file;
+	$newfile =~ s/\.old$/.new/;
+	if (-e $newfile) {
+		warn "can't rename $file to $newfile: $newfile exists\n"
+	} elsif(rename $file => $newfile) {
+		# 改名成功，什么都不需要做
+	} else {
+		warn "rename $file to $newfile failed:$!\n";
+	}
+}
+```
+循环里的前两行还可以修改为
+```
+my ($newfile = $file) =~ s/\.old$/.new/;
+```
+也可以在Perl 5.14里面加上/r修饰符,
+```
+use v5.14;
+my $newfile = $file =~ s/\.old$/.new/r;
+```
+* 链接与文件
+### 13.5.2 创建和删除目录
+创建失败返回设定值
+```
+mkdir 'fred', 0755 or warn "Cannot make fred directory: $!";
+```
+  * 移除空目录
+```
+foreach my $dir(qw{fred barney betty}) {
+	rmdir $dir or warn "cannot rmdir $dir:$!\n";
+}
+```
+如果要创建临时目录或文件，可以用File::Temp模块
+  * 修改权限
+chmod不支持linux中a+x这种格式，除非从CPAN安装了File::chmod.
+常规格式如下：
+```
+chmod 0755, 'fred','barney';
+```
+  * 修改隶属关系
+```
+chown $user, $group, glob '*.o';
+```
+  * 修改时间戳
+```
+my $now = time;
+my $ago = $now - 24 * 60 * 60; # 一天的秒数
+utime $now, $ago, glob '*';    # 将最后访问时间改为当前时间，最后修改时间改为一天前
+```
 # perl的一些函数
 * die
 用于终止程序执行并输出一条错误信息。
 * grep
 用于过滤元素。
+* localtime
+localtime函数主要用于将一个时间戳（从 1970 年 1 月 1 日 00:00:00 UTC 到给定时间的秒数，通常可以由time函数提供）转换为一个包含本地时间信息的列表。
+
 * split
 用于根据指定的分隔符将字符串分割成多个部分，并返回一个数组。
 * scalar
@@ -667,6 +821,12 @@ push函数用于将元素添加到数组的末尾
     * ->add_edge 用于在图中添加一条边。此方法期望接收两个参数，这两个参数代表边的两个节点。
     * ->connected_components 用于找出图中所有的连接组件。无向图中的连接组件是指图中最大的顶点集合，集合中的任意两个顶点都是通过路径相连的。返回一个数组的引用，这个数组包含了多个数组的引用。
     * ->vertices 获取顶点的集合
+* Module::CoreList
+是一个 Perl 模块，它提供了关于 Perl 核心模块的详细信息。这些信息包括哪些模块是 Perl 核心的一部分，以及这些模块在不同版本的 Perl 中的状态。
+* `File::HomeDir`模块
+去往特定用户的主目录，他支持大部分操作系统。
+* File::Glob`模块提供各式兼容和扩展的文件名通配
+* File::Spec::Functions
 # 内置文档格式
 Pod：它允许开发者在源代码中嵌入文档。Pod文档可以被转换成多种格式，如HTML、man页等。
 * =head1 NAME 这是一个Pod指令，表示文档的“名称”部分的开始。
