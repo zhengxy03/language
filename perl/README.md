@@ -599,9 +599,42 @@ my $last_name = $last_name{$someone} // '{no last name}';
 ```
 * 使用部分求值操作符的控制结构
 &&、||、//、?:都是根据左边的值确定要不要执行右边的表达式
-
-
-
+# 11 Perl模块
+## 11.1 寻找模块
+寻找那些没有随Perl发布的模块，可以到CPAN Seach网站（http://search.cpan.org）或MetaCPAN（http://www.metacpan.org）<br>
+使用perldoc查看模块的文档
+## 11.2 安装模块
+* MakeMaker
+```
+perl Makefile.PL INSTALL_BASE=Users/fred/lib
+make install
+```
+* Module::Build
+* CPAN.pm
+* cpanm
+* local::lib 安装到自己的目录
+## 11.3 使用简易模块
+* 找出基名
+  * File::Basename
+    * basename 获取基名
+    * dirname 获取目录全名
+    * 仅选用模块中的部分函数：use声明中加入导出列表，不导入也可通过全名的方式来调用函数
+```
+use File::Basename qw/ basename /;
+my $dirname = File::Basename::basename $name;
+```
+* 文件全名：
+  * File::Spec
+是面向对象的模块（OO），可以调用方法：模块的名称->方法的名称
+  * Path::Class
+* CGI.pm
+简单且高效的方式来创建动态网页内容。
+* DBI
+  DBI数据库接口，需安装DBD（数据库驱动程序）<br>
+  要连接数据库，use加载DBI模块并调用方法connect
+* 处理日期和时间：
+  * DateTime
+  将描述转换成DateTime对象
 # perl的一些函数
 * die
 用于终止程序执行并输出一条错误信息。
