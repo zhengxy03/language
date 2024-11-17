@@ -1,0 +1,10 @@
+#!/usr/bin/perl -w
+die "no file supplied.\n" unless @ARGV;
+my $oldest_name = shift @AGRV;
+my $oldest_age = -M $oldest_name;
+
+foreach (@AGRV){
+  my $age = -M;
+  ($oldest_name, $oldest_age) = ($_, $age) if ($oldest_age < $age);
+}
+printf "the oldest file was %s, and it was %.1f days old.\n", $oldest_name, $oldest_age;
