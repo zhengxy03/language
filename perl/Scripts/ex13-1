@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+print "which directory?\n"
+chomp(my $dir = <STDIN>);
+if ( $dir =~ /^\s+\z){
+  chdir or die "can't find directory: $!";
+}else{
+  chdir $dir or die "can't find directory: $!";
+}
+my @file = <*>;
+foreach (@file){
+  print "$_\n";
+}
