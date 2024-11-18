@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+print "please give a string.\n";
+chomp(my $string = <STDIN>);
+print "please give a substring.\n";
+chomp(my $substring= <STDIN>);
+
+my @places;
+
+my $pos = -1;
+foreach {
+    my $pos = index($string, "$substring", $pos +1);
+    last if $pos == -1;
+    push @places, $pos;
+}
+print "location of '$substring' in '$string' are: @places\n";

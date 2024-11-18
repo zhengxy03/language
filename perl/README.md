@@ -654,6 +654,26 @@ my $duration = $dt2- $dt1;
 my @units = $duration->in_units( qw(year month day) );
 printf '%d years, %d months, and %d days', @units;
 ```
+# perl的一些模块
+* Path::Tiny 
+提供一个简单、高效且易于使用的方式来处理文件和目录路径。它提供了许多方法来执行常见的文件操作。
+    * path函数：它返回一个 Path::Tiny 对象。创建一个文件路径对象，表示要写入的文件。
+    * slurp:把文件里所有的内容一次性读出来，然后保存到一个变量里。
+        $content = $file->slurp(-> 是Perl中用来调用对象方法的符号。这里我们用它来告诉$file对象，我们要使用它的slurp方法。)
+    * spew: 用于将数据写入文件。
+    * append: 用于将内容追加到文件末尾。
+* Graph::Undirected
+用于处理无向图
+    * ->new 用于初始化和创建一个新的对象实例。
+    * ->add_edge 用于在图中添加一条边。此方法期望接收两个参数，这两个参数代表边的两个节点。
+    * ->connected_components 用于找出图中所有的连接组件。无向图中的连接组件是指图中最大的顶点集合，集合中的任意两个顶点都是通过路径相连的。返回一个数组的引用，这个数组包含了多个数组的引用。
+    * ->vertices 获取顶点的集合
+* Module::CoreList
+是一个 Perl 模块，它提供了关于 Perl 核心模块的详细信息。这些信息包括哪些模块是 Perl 核心的一部分，以及这些模块在不同版本的 Perl 中的状态。
+* `File::HomeDir`模块
+去往特定用户的主目录，他支持大部分操作系统。
+* File::Glob`模块提供各式兼容和扩展的文件名通配
+* File::Spec::Functions
 # 12 文件测试
 ## 12.1 文件测试操作符
 -x的形式
@@ -669,7 +689,7 @@ printf '%d years, %d months, and %d days', @units;
 ## 12.4 位运算操作符
 权限位
 # 13 目录操作
-可以使用标准模块之一File::Spec实现相对路径和绝对路径之间的相互转换\
+可以使用标准模块之一File::Spec实现相对路径和绝对路径之间的相互转换
 ## 13.1 修改工作目录
 chdir:和shell中的cd一个意思,但无法使用~开头
 ```
@@ -712,6 +732,17 @@ foreach $file (readdir DIR) {
 	print "one file in $dir_to_process is $file\n";
 }
 closedir DIR;
+```
+File::Spec::Functions
+```
+open my $somedir, $dirname or die "can't open $dirname: $!"
+while (my $name = readdir $somedir){
+    if ($name =~ /^\./){
+        next;
+    }
+    $name = catfile($dirname, $name);
+    next unless -f $name and -r $name;
+}
 ```
 ## 13.4 递归访问目录
 ## 13.5 文件和目录的操作
@@ -758,6 +789,9 @@ use v5.14;
 my $newfile = $file =~ s/\.old$/.new/r;
 ```
 * 链接与文件
+    * 硬链接
+    * 符号链接
+        * 取得符号链接指向位置：readlink 
 ### 13.5.2 创建和删除目录
 创建失败返回设定值
 ```
@@ -786,6 +820,99 @@ my $now = time;
 my $ago = $now - 24 * 60 * 60; # 一天的秒数
 utime $now, $ago, glob '*';    # 将最后访问时间改为当前时间，最后修改时间改为一天前
 ```
+# 14 字符串与排序
+# 14.1 子字符串
+* 用index查找子字符串
+```
+my $where = index($stuff, "wor");
+```
+使用`rindex`从末尾开始找，结果是和index一样的
+* 用substr操作子字符串
+```
+my $part = substr($string, $initial_position, $length);
+```
+* 用sprintf格式化字符串
+```
+my $money = sprintf "%.2f", 2.4997;
+```
+    * 格式化金额数字
+    * 非十进制数字的转换
+        * hex(),oct() 
+
+## 14.2 排序
+* 高级排序
+    * 数字：飞碟操作符’<=>’
+    * 字符串：cmp
+```
+my @descending = sort {$b <=> $a} @some_numbers;
+```
+* 按哈希值排序
+```
+my %score = ("barney" => 195, "fred" => 205, "dino" => 30);
+my @winners = by_score keys %score;
+```
+* 按多个键排序
+例子1：
+```
+my %score = (
+			"barney" => 195, "fred" => 205, 
+			"dino" => 30, "bamm-bamm" => 195,
+			);
+my @winners = by_score_and_name keys %score;
+
+sub by_score_and_name {
+	$score{$b} <=> $score{$a} #先按照分数降序排列
+	or
+	$a cmp $b #分数相同的再按名字的ASCII码序排列
+} @winners
+```
+例子2：
+```
+@patron_IDs = sort{
+	&fines($b) <=> &fines($a) or
+	$items($b) <=> $items($a) or
+	$family_name{$a} cmp $family_name{$b} or
+	$personal_name{$a} cmp $family_name{$b} or
+	$a <=> $b;
+} @patron_IDs;
+```
+## 15 高级perl技巧
+### 15.1 切片
+* 列表切片：Perl可以把列表当数组，从索引取得里面的值(标量上下文)
+```
+my $mtime = (stat $some_file)[9];
+#括号是必须的，列表上下文
+```
+```
+my ($first, $last) = (split /:/)[1:5];
+```
+* 数组切片：列表上下文
+```
+my @number = @names[9,0,2,1,0];
+#圆括号非必须
+```
+切片可以内插到字符串中
+* 哈希切片 也是列表上下文@
+```
+my @three_scores = @score{ qw/ barney fred dino/ };
+```
+## 15.2 捕获错误
+* eval
+只要在它监察范围内出现致命错误，就会立即停止运行整个块。推出后继续运行其余代码。块末尾有分号。<br>
+```
+eval { $barney = $fred / $dino };
+```
+返回值是语句块最后一条表达式的执行结果，捕捉到错误返回undef，并在特殊变量$@中设置错误信息，用于设定默认值：
+```
+my $barney = eval { $fred /$dino } // 'NaN';
+print " i could't divide by \$dino: $@" if $@;
+```
+eval字符串用法
+* 更为高级的错误处理
+* autodie
+## 15.3 grep
+## 15.4 map
+## 15.5 其他
 # perl的一些函数
 * die
 用于终止程序执行并输出一条错误信息。
@@ -807,26 +934,7 @@ my @result = map { 表达式 } @list;
 ```
 * push
 push函数用于将元素添加到数组的末尾
-# perl的一些模块
-* Path::Tiny 
-提供一个简单、高效且易于使用的方式来处理文件和目录路径。它提供了许多方法来执行常见的文件操作。
-    * path函数：它返回一个 Path::Tiny 对象。创建一个文件路径对象，表示要写入的文件。
-    * slurp:把文件里所有的内容一次性读出来，然后保存到一个变量里。
-        $content = $file->slurp(-> 是Perl中用来调用对象方法的符号。这里我们用它来告诉$file对象，我们要使用它的slurp方法。)
-    * spew: 用于将数据写入文件。
-    * append: 用于将内容追加到文件末尾。
-* Graph::Undirected
-用于处理无向图
-    * ->new 用于初始化和创建一个新的对象实例。
-    * ->add_edge 用于在图中添加一条边。此方法期望接收两个参数，这两个参数代表边的两个节点。
-    * ->connected_components 用于找出图中所有的连接组件。无向图中的连接组件是指图中最大的顶点集合，集合中的任意两个顶点都是通过路径相连的。返回一个数组的引用，这个数组包含了多个数组的引用。
-    * ->vertices 获取顶点的集合
-* Module::CoreList
-是一个 Perl 模块，它提供了关于 Perl 核心模块的详细信息。这些信息包括哪些模块是 Perl 核心的一部分，以及这些模块在不同版本的 Perl 中的状态。
-* `File::HomeDir`模块
-去往特定用户的主目录，他支持大部分操作系统。
-* File::Glob`模块提供各式兼容和扩展的文件名通配
-* File::Spec::Functions
+
 # 内置文档格式
 Pod：它允许开发者在源代码中嵌入文档。Pod文档可以被转换成多种格式，如HTML、man页等。
 * =head1 NAME 这是一个Pod指令，表示文档的“名称”部分的开始。

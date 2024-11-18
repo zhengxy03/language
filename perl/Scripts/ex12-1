@@ -10,7 +10,7 @@ sub attributes {
   return "exists" unless @attrib;
   'is' . join "and", @attrib;
 }
-foreach my $file (@AGRV){
+foreach my $file (@ARGV){
   my $attribs = &attributes($file);
   print "'$file' $attribs.\n";
 }

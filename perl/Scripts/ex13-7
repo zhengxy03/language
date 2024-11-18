@@ -1,0 +1,17 @@
+#!/usr/bin/perl -w
+use File::Spec;
+use File::Basename;
+
+my $symlink = @ARGV[0] eq '-s';
+shift @ARGV if $symlink;
+
+my($source, $dest) = @ARGV;
+if (-d $dest){
+    my $basename = basename $source;
+    $dest = File::Spec->catfile($dest, $basename);
+}
+if ($symlink){
+    symlink $source, $dest or die "can't make soft link: $!\n";
+}else{
+    link $source, $dest or die "can't make hard link: $!\n";
+}

@@ -1,0 +1,20 @@
+#!/usr/bin/perl -w
+my $filename = 'path/to/sample_text';
+open my $fh, '<', $filename or die "can't open: $!"; #只读
+chomp(my @strings = <FILE>);
+while (1){  #无限循环
+    print 'please enter a pattern';
+    chomp(my $pattern = <STDIN>);
+    last if $pattern =~ /^\s+\z/;
+    my @matches = eval {
+        grep /$pattern/, @strings;
+    };
+    if ($@){
+        print "error: $@";
+    }else{
+        my $count = @matches;
+        print " there were $count matching strings:\n", 
+            map "$_\n", @matches;
+    }
+    print "\n";
+}

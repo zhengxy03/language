@@ -8,7 +8,7 @@ while (<>){
         delete $do_these{$ARGV};
     }
 }
-@AGRV = sort keys %do_these;
+@ARGV = sort keys %do_these;
 $^I = ".bat";
 while (<>){
     if (/^#!/){

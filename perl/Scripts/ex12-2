@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w
 die "no file supplied.\n" unless @ARGV;
-my $oldest_name = shift @AGRV;
+my $oldest_name = shift @ARGV;
 my $oldest_age = -M $oldest_name;
 
-foreach (@AGRV){
+foreach (@ARGV){
   my $age = -M;
   ($oldest_name, $oldest_age) = ($_, $age) if ($oldest_age < $age);
 }
